@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Minha Rádio Online</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+  #player { margin-top: 20px; }
+  #info { margin-top: 10px; font-size: 18px; }
+</style>
+</head>
+<body>
+<h1>Minha Rádio Online</h1>
+
+<div id="player">
+    <audio autoplay loop id="radioPlayer">
+        <source src="http://localhost:8000/stream.mp3" type="audio/mpeg">
+        Seu navegador não suporta o áudio.
+    </audio>
+</div>
+
+<div id="info">
+    <div><strong>Música atual:</strong> <span id="title">Carregando...</span></div>
+    <div><strong>Ouvintes:</strong> <span id="listeners">0</span></div>
+</div>
+
+<script>
+const player = document.getElementById('radioPlayer');
+player.volume = 0.1;
+
+async function fetchStatus() {
+    const res = await fetch('/api/radio/status');
+    const data = await res.json();
+    document.getElementById('title').innerText = data.title;
+    document.getElementById('listeners').innerText = data.listeners;
+}
+setInterval(fetchStatus, 30000);
+fetchStatus();
+</script>
+
+</body>
+</html>
