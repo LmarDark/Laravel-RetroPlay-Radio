@@ -15,7 +15,6 @@ Projeto de uma rádio online inspirada no GTA San Andreas, feita com Laravel.
 - **Backend:** Laravel (PHP)
 - **Frontend:** Blade, HTML, CSS, JavaScript
 - **Streaming:** Icecast (esperado em `http://localhost:8000`)
-- **Banco de dados:** SQLite (padrão do Laravel)
 
 ## Como rodar localmente
 
@@ -28,7 +27,6 @@ Projeto de uma rádio online inspirada no GTA San Andreas, feita com Laravel.
 2. **Instale as dependências:**
 	```bash
 	composer install
-	npm install
 	```
 
 3. **Configure o ambiente:**
@@ -38,20 +36,15 @@ Projeto de uma rádio online inspirada no GTA San Andreas, feita com Laravel.
 	  php artisan key:generate
 	  ```
 
-4. **Execute as migrations:**
+4. **Inicie o servidor:**
 	```bash
-	php artisan migrate
-	```
-
-5. **Inicie o servidor:**
-	```bash
-	php artisan serve
+	php artisan serve --port=8080
 	```
 
 6. **Certifique-se que o Icecast está rodando em `localhost:8000`** e transmitindo em `/stream.mp3`.
 
 7. **Acesse:**  
-	[http://localhost:8000](http://localhost:8000)
+	[http://localhost:8080](http://localhost:8080)
 
 ## Estrutura de Diretórios
 
