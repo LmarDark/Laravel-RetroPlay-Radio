@@ -9,7 +9,7 @@ class RadioController extends Controller
 {
    public function index()
     {
-        $statusUrl = 'http://127.0.0.1:8000/status-json.xsl';
+        $statusUrl = 'http://icecast:8000/status-json.xsl';
         $response = Http::get($statusUrl);
         $data = $response->json();
 
@@ -32,7 +32,7 @@ class RadioController extends Controller
 
     public function status()
     {
-        $statusUrl = 'http://127.0.0.1:8000/status-json.xsl'; // Substitua pelo seu Icecast
+        $statusUrl = 'http://icecast:8000/status-json.xsl';
         $response = Http::get($statusUrl);
         $data = $response->json();
 
@@ -48,7 +48,7 @@ class RadioController extends Controller
         return response()->json([
             'listeners' => $listeners,
             'title' => $title,
-            'stream_url' => 'http://127.0.0.1:8000/stream.mp3'
+            'stream_url' => 'http://icecast:8000/stream.mp3'
         ]);
     }
 }

@@ -14,8 +14,7 @@
 
 <div id="player">
     <audio autoplay loop id="radioPlayer">
-        <source src="http://localhost:8000/stream.mp3" type="audio/mpeg">
-        Seu navegador não suporta o áudio.
+        <source src="https://retroplayradio.rondodev.com.br/stream/stream.mp3" type="audio/mpeg">
     </audio>
 </div>
 
