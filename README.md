@@ -14,7 +14,7 @@ Projeto de uma rádio online inspirada no GTA San Andreas, feita com Laravel.
 
 - **Backend:** Laravel (PHP)
 - **Frontend:** Blade, HTML, CSS, JavaScript
-- **Streaming:** Icecast (esperado em `http://localhost:8000`)
+- **Streaming:** Icecast (esperado em `http://127.0.0.1:8000`)
 
 ## Como rodar localmente
 
@@ -53,7 +53,7 @@ Projeto de uma rádio online inspirada no GTA San Andreas, feita com Laravel.
 - `resources/views/waiting.blade.php`: Tela de espera quando a rádio está cheia.
 - `routes/web.php`: Rota principal (`/`).
 - `routes/api.php`: Endpoint para status da rádio (`/api/radio/status`).
-- `musics/`: Pasta para arquivos de áudio (exemplo incluso).
+- `playlist/`: Pasta para arquivos de áudio (exemplo incluso).
 
 ## API
 

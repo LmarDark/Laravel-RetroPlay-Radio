@@ -1,56 +1,55 @@
+# Dependências
 /vendor/
 node_modules/
-npm-debug.log
-yarn-error.log
 
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
-
-# Laravel 5 & Lumen specific
-public/storage
-public/hot
-
-# Laravel 5 & Lumen specific with changed public path
-public_html/storage
-public_html/hot
-
-storage/*.key
+# Arquivos de ambiente
 .env
-Homestead.yaml
-Homestead.json
-/.vagrant
-.phpunit.result.cache
+.env.*
 
-/public/build
-/storage/pail
-.env.backup
-.env.production
-.phpactor.json
-auth.json
-
-
+# Cache e logs
 *.log
+/storage/
+/storage/app/
+/storage/app/public/
+/storage/framework/
+/storage/logs/
+bootstrap/cache/
+logs/
+cache/
+
+# IDEs e arquivos temporários
+.idea/
+.vscode/
 .DS_Store
-.env
-.env.backup
-.env.production
-.phpactor.json
+Thumbs.db
+*.sublime-workspace
+*.sublime-project
+
+# Laravel
 .phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
+.phpunit.cache
 /public/build
 /public/hot
 /public/storage
 /storage/*.key
 /storage/pail
-/vendor
-Homestead.json
+
+# Docker
+*.pid
+*.seed
+*.bak
+*.swp
+*.tmp
+*.temp
+
+# Homestead
 Homestead.yaml
-Thumbs.db
+Homestead.json
+/.vagrant
+
+# Outros
+.phpactor.json
+auth.json
+/.fleet
+/.nova
+/.zed
