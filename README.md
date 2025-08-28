@@ -1,65 +1,190 @@
+# RetroPlay Radio 🎶📻
 
-# GTA SA Rádio Online
+Este projeto é uma aplicação Laravel que integra um servidor **Icecast** para streaming de áudio e exibe informações em tempo real, como número de ouvintes e música em reprodução.
 
-Projeto de uma rádio online inspirada no GTA San Andreas, feita com Laravel.
+---
 
-## Funcionalidades
+## 🚀 Funcionalidades
 
-- Transmissão de áudio online via Icecast.
-- Exibe a música atual e o número de ouvintes em tempo real.
-- Limite de ouvintes simultâneos, com tela de espera caso a rádio esteja cheia.
-- Interface web simples e responsiva.
+* Player integrado para escutar o stream do Icecast.
+* Exibição do **título da música** em reprodução.
+* Exibição da quantidade de **ouvintes simultâneos**.
+* API (`/api/radio/status`) que retorna status do servidor Icecast:
 
-## Tecnologias
+  ```json
+  {
+    "listeners": 1,
+    "title": "Nome da música",
+    "stream_url": "http://retroplayradio.rondodev.com.br:8000/stream.mp3"
+  }
+  ```
 
-- **Backend:** Laravel (PHP)
-- **Frontend:** Blade, HTML, CSS, JavaScript
-- **Streaming:** Icecast (esperado em `http://127.0.0.1:8000`)
+---
 
-## Como rodar localmente
+## 📦 Requisitos
 
-1. **Clone o repositório:**
-	```bash
-	git clone https://github.com/seu-usuario/gta-sa-radio-online.git
-	cd gta-sa-radio-online
-	```
+* PHP 8.2+
+* Composer
+* Node.js 18+
+* NPM ou Yarn
+* Banco de dados SQLite (ou outro suportado pelo Laravel)
+* Icecast 2.4+
+* FFMPEG
 
-2. **Instale as dependências:**
-	```bash
-	composer install
-	```
+---
 
-3. **Configure o ambiente:**
-	- Copie `.env.example` para `.env` e ajuste as variáveis conforme necessário.
-	- Gere a chave da aplicação:
-	  ```bash
-	  php artisan key:generate
-	  ```
+## ⚙️ Instalação do Projeto (Laravel)
 
-4. **Inicie o servidor:**
-	```bash
-	php artisan serve --port=8080
-	```
+Clone o repositório e instale as dependências:
 
-6. **Certifique-se que o Icecast está rodando em `localhost:8000`** e transmitindo em `/stream.mp3`.
+```bash
+git clone https://github.com/seuusuario/retroplay-radio.git
+cd retroplay-radio
 
-7. **Acesse:**  
-	[http://localhost:8080](http://localhost:8080)
+# Instalar dependências PHP
+composer install
 
-## Estrutura de Diretórios
+# Instalar dependências JS
+npm install && npm run build
 
-- `app/Http/Controllers/RadioController.php`: Controlador principal da rádio.
-- `resources/views/radio.blade.php`: Página principal da rádio.
-- `resources/views/waiting.blade.php`: Tela de espera quando a rádio está cheia.
-- `routes/web.php`: Rota principal (`/`).
-- `routes/api.php`: Endpoint para status da rádio (`/api/radio/status`).
-- `playlist/`: Pasta para arquivos de áudio (exemplo incluso).
+# Configurar variáveis de ambiente
+cp .env.example .env
 
-## API
+# Gerar chave do Laravel
+php artisan key:generate
+```
 
-- `GET /api/radio/status`  
-  Retorna JSON com título da música, ouvintes e URL do stream.
+Edite o arquivo `.env` e configure conforme necessário.
 
-## Licença
+---
 
-MIT
+## 🎵 Configuração do Icecast (Linux)
+
+### Instalar Icecast
+
+No Ubuntu/Debian:
+
+```bash
+sudo apt update
+sudo apt install icecast2 -y
+```
+
+Durante a instalação, defina:
+
+* Senha de administrador
+* Senha de relay
+* Senha de source (importante para o FFMPEG enviar áudio)
+
+Os arquivos de configuração ficam em:
+
+```
+/etc/icecast2/icecast.xml
+```
+
+Edite esse arquivo para ajustar:
+
+* Porta do servidor (exemplo: `8000`)
+* Nome do mountpoint (`/stream.mp3`)
+* Senhas (admin/source/relay)
+
+Após configurar:
+
+```bash
+sudo systemctl enable icecast2
+sudo systemctl start icecast2
+```
+
+O status pode ser acessado em:
+
+```
+http://seu-dominio:8000/status-json.xsl
+```
+
+---
+
+## 🎤 Enviando áudio com FFMPEG
+
+Você pode transmitir músicas ou playlists diretamente para o Icecast.
+
+### Instalar FFMPEG
+
+```bash
+sudo apt install ffmpeg -y
+```
+
+### Enviar um arquivo de música para o Icecast
+
+```bash
+ffmpeg -re -i sua-musica.mp3 -acodec libmp3lame -content_type audio/mpeg \
+f "icecast://source:SENHA@localhost:8000/stream.mp3"
+```
+
+* `sua-musica.mp3` → Arquivo de áudio
+* `source:SENHA` → Usuário e senha configurados no `icecast.xml`
+* `stream.mp3` → Mountpoint configurado
+
+### Transmitir uma playlist
+
+```bash
+ffmpeg -re -i "playlist.m3u" -acodec libmp3lame -content_type audio/mpeg \
+f "icecast://source:SENHA@localhost:8000/stream.mp3"
+```
+
+Agora o stream estará disponível em:
+
+```
+http://seu-dominio:8000/stream.mp3
+```
+
+---
+
+## 🌐 API Laravel
+
+A API que consulta o Icecast está disponível em:
+
+```
+GET /api/radio/status
+```
+
+Exemplo de resposta:
+
+```json
+{
+  "listeners": 5,
+  "title": "Música Atual",
+  "stream_url": "http://seu-dominio:8000/stream.mp3"
+}
+```
+
+Essa rota utiliza a função `status()` do **RadioController** para buscar os dados de:
+
+```
+http://icecast:8000/status-json.xsl
+```
+
+---
+
+## 🎧 Player no Frontend
+
+O frontend busca a API a cada 5 segundos e atualiza:
+
+```javascript
+const player = document.getElementById('radioPlayer');
+player.volume = 0.1;
+
+async function fetchStatus() {
+    const res = await fetch('/api/radio/status');
+    const data = await res.json();
+    document.getElementById('title').innerText = data.title;
+    document.getElementById('listeners').innerText = data.listeners;
+}
+setInterval(fetchStatus, 5000);
+fetchStatus();
+```
+
+---
+
+## 📄 Licença
+
+Este projeto é distribuído sob a licença MIT.
+Sinta-se livre para contribuir e melhorar! 🚀
