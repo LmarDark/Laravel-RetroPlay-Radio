@@ -6,6 +6,10 @@ node_modules/
 .env
 .env.*
 
+# Arquivos de produção
+docker-compose.yml
+/docker/
+
 # Cache e logs
 *.log
 /storage/

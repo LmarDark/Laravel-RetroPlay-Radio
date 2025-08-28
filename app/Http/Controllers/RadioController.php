@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class RadioController extends Controller
 {
-   public function index()
+    public function index()
     {
         $statusUrl = 'http://icecast:8000/status-json.xsl';
         $response = Http::get($statusUrl);
@@ -15,8 +15,8 @@ class RadioController extends Controller
 
         $listeners = 0;
         $title = "Nenhuma música tocando";
-        $maxClients = 100; // deve ser igual ao icecast.xml
-
+        $maxClients = 100; 
+        
         if(isset($data['icestats']['source'][0])) {
             $source = $data['icestats']['source'][0];
             $listeners = $source['listeners'] ?? 0;
@@ -35,12 +35,18 @@ class RadioController extends Controller
         $statusUrl = 'http://icecast:8000/status-json.xsl';
         $response = Http::get($statusUrl);
         $data = $response->json();
-
+      
         $listeners = 0;
         $title = "Nenhuma música tocando";
 
-        if(isset($data['icestats']['source'][0])) {
+        if (isset($data['icestats']['source'][0])) {
+            // Caso com múltiplos sources
             $source = $data['icestats']['source'][0];
+            $listeners = $source['listeners'] ?? 0;
+            $title = $source['title'] ?? "Nenhuma música tocando";
+        } elseif (isset($data['icestats']['source'])) {
+            // Caso com único source
+            $source = $data['icestats']['source'];
             $listeners = $source['listeners'] ?? 0;
             $title = $source['title'] ?? "Nenhuma música tocando";
         }

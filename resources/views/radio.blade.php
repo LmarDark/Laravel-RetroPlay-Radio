@@ -20,7 +20,7 @@
 
 <div id="info">
     <div><strong>Música atual:</strong> <span id="title">Carregando...</span></div>
-    <div><strong>Ouvintes:</strong> <span id="listeners">0</span></div>
+    <div><strong>Ouvintes:</strong> <span id="listeners">0 Ouvintes</span></div>
 </div>
 
 <script>
@@ -28,12 +28,17 @@ const player = document.getElementById('radioPlayer');
 player.volume = 0.1;
 
 async function fetchStatus() {
-    const res = await fetch('/api/radio/status');
-    const data = await res.json();
-    document.getElementById('title').innerText = data.title;
-    document.getElementById('listeners').innerText = data.listeners;
+    try {
+        const res = await fetch('/api/radio/status');
+        const data = await res.json();
+        document.getElementById('title').innerText = data.title;
+        document.getElementById('listeners').innerText = data.listeners;
+    } catch (e) {
+        console.error("Erro ao buscar status da rádio:", e);
+    }
 }
-setInterval(fetchStatus, 30000);
+
+setInterval(fetchStatus, 5000);
 fetchStatus();
 </script>
 
